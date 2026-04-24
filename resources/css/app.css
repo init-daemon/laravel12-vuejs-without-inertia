@@ -19,3 +19,7 @@ body {
 .dark body {
     @apply text-gray-100 bg-gray-950;
 }
+
+button {
+  cursor: pointer;
+}

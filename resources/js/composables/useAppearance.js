@@ -35,14 +35,17 @@ export function useTheme() {
         }
     });
 
-    function updateTheme(value) {
-        theme.value = value;
-        localStorage.setItem('theme', value);
-        updateTheme(value);
+    function toggleTheme() {
+        const newTheme = theme.value === 'dark' ? 'light' : 'dark';
+
+        localStorage.setItem('theme', newTheme);
+        theme.value = newTheme;
+        
+        updateTheme(newTheme);
     }
 
     return {
         theme,
-        updateTheme,
+        toggleTheme,
     };
 }
