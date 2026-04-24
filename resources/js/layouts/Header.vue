@@ -55,6 +55,9 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { useTheme } from '@/composables/useAppearance'
 import {
     Home,
     Sun,
@@ -63,6 +66,18 @@ import {
     LogOut,
 } from 'lucide-vue-next'
 
+import { Button } from '@/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { storeToRefs } from 'pinia'
+
 const router = useRouter()
 
 const authStore = useAuthStore()
@@ -70,6 +85,15 @@ const { user } = storeToRefs(authStore);
 
 const { theme, toggleTheme } = useTheme();
 
+
+function getInitials(name) {
+    if (!name) return ''
+
+    const names = name.trim().split(' ')
+    if (names.length === 1) return names[0].charAt(0).toUpperCase()
+
+    return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase()
+}
 
 async function handleLogout() {
     await authStore.logout()

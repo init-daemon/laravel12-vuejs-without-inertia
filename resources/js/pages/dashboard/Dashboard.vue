@@ -31,7 +31,10 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/useAuthStore';
+import { storeToRefs } from 'pinia';
 import { useDateFormat } from '@vueuse/core'
+
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
