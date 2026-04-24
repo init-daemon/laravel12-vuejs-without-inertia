@@ -32,10 +32,6 @@
 <script setup>
 import 'vue-sonner/style.css'
 
-import { onMounted, ref } from 'vue'
-import { Toaster } from '@/components/ui/sonner'
-import { useAuthStore } from '@/stores/useAuthStore'
-import { useTheme } from '@/composables/useAppearance'
 import { Loader2 } from 'lucide-vue-next'
 import Header from './Header.vue'
 
