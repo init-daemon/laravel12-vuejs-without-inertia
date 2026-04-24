@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/vue-starter-kit",
+    "name": "init-daemon/laravel12-vuejs-without-inertia",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Laravel12, VueJS3, tailwindcss4 and shadcn starter kit- without inertiaJS.",
     "keywords": [
         "laravel",
         "framework"
@@ -11,7 +11,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.10.1",
+        "tymon/jwt-auth": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
