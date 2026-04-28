@@ -29,7 +29,7 @@
                         />
                     </div>
 
-                        <Button type="submit" class="w-full" :disabled="loading">
+                    <Button type="submit" class="w-full" :disabled="loading">
                         <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
                         {{ loading ? 'Connexion...' : 'Se connecter' }}
                     </Button>
@@ -51,7 +51,7 @@ const authStore = useAuthStore()
 const toast = useToast()
 
 const credentials = ref({
-    email: 'test@example.com',
+    email: 'admin@app.com',
     password: 'password',
 })
 
@@ -69,9 +69,9 @@ const handleLogin = async () => {
         })
         router.push({ name: 'dashboard' })
     } catch (err) {
-        const message =
-            err.response?.data?.message || 'Error.'
+        const message = err.response?.data?.message || 'Error.'
         error.value = message
+        
         toast.error({ description: message })
     } finally {
         loading.value = false

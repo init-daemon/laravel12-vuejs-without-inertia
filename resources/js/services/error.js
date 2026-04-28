@@ -25,3 +25,12 @@ export const getFirstErrorMessage = (errors) => {
     
     return '';
 };
+
+
+export const getErrorsByKey = (errors, key) => {
+    try {
+        return errors[key][0];
+    } catch (e) {
+        return '';
+    }
+}

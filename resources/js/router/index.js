@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '@/pages/dashboard/Dashboard.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import Login from '@/pages/auth/Login.vue';
+import profileRoute from './profile';
 
 const routes = [
     {
@@ -16,6 +17,7 @@ const routes = [
         component: Login,
         meta: { requiresGuest: true },
     },
+    ...profileRoute,
 ];
 
 const router = createRouter({

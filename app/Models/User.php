@@ -20,7 +20,9 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
+        'username',
         'email',
         'password',
     ];
@@ -35,6 +37,8 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    protected $appends = ["fullname"];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -46,6 +50,11 @@ class User extends Authenticatable implements JWTSubject
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getFullnameAttribute()
+    {
+        return $this->firstname . " " . $this->lastname;
     }
 
     public function getJWTIdentifier(): mixed

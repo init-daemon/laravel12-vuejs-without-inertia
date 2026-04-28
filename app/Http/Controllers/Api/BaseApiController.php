@@ -13,14 +13,14 @@ class BaseApiController extends Controller
      *
      * @return JsonResponse
      */
-    public static function success($result = null, ?string $message = null)
+    public static function success($result = null, ?string $message = null, $code = 200)
     {
         $response = [
             'data'    => $result,
             'message' => $message,
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, $code);
     }
 
     /**

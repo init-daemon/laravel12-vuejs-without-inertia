@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Contracts\AuthServiceInterface;
 use App\Http\Controllers\Api\BaseApiController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseApiController
 {
@@ -25,7 +26,7 @@ class AuthController extends BaseApiController
             return self::error("Invalid credentials", code: 422);
         }
 
-        return response()->json([
+        return self::success([
             'token' => $token,
             'user' => $user,
         ]);
@@ -55,9 +56,32 @@ class AuthController extends BaseApiController
 
         [$token, $user] = $this->authService->register($request->all());
 
-        return response()->json([
+        return self::success([
             'token' => $token,
             'user' => $user,
-        ], 201);
+        ], code: 201);
+    }
+
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = $request->user();
+        
+        if (!Hash::check($request->old_password, $user->password)) {
+            $errMsg = 'The current password is incorrect.';
+            return self::error($errMsg, [
+                'old_password' => [$errMsg],
+            ], 422);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return self::success(message: 'Password updated successfully');
     }
 }

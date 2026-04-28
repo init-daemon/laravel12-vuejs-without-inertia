@@ -10,7 +10,7 @@
                 <Button
                     variant="ghost"
                     size="icon"
-                    @click="toggleTheme"
+                    @click="appStore.toggleTheme"
                     aria-label="Basculer le thème"
                 >
                     <Sun v-if="theme === 'dark'" class="h-5 w-5" />
@@ -24,7 +24,7 @@
                                 <Avatar>
                                     <AvatarImage :src="user.avatar" :alt="user.name" />
                                     <AvatarFallback>
-                                        {{ getInitials(user.name) }}
+                                        {{ getInitials(user.fullname) }}
                                     </AvatarFallback>
                                 </Avatar>
                             </Button>
@@ -37,7 +37,7 @@
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem @click="() => console.log('profile')">
+                            <DropdownMenuItem @click="() => router.push({ name: 'profile' })">
                                 <User class="mr-2 h-4 w-4" />
                                 Profile
                             </DropdownMenuItem>
@@ -68,7 +68,8 @@ const router = useRouter()
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore);
 
-const { theme, toggleTheme } = useTheme();
+const appStore = useAppStore();
+const { theme } = storeToRefs(appStore);
 
 
 async function handleLogout() {
