@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Contracts\AuthServiceInterface;
+use App\Events\UserForgotPassword;
 use App\Http\Controllers\Api\BaseApiController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends BaseApiController
 {
@@ -14,7 +17,7 @@ class AuthController extends BaseApiController
     ) {}
 
     public function login(Request $request)
-    {
+    {        
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -65,17 +68,19 @@ class AuthController extends BaseApiController
 
     public function updatePassword(Request $request)
     {
+        $user = auth()->user();
+
         $request->validate([
-            'old_password' => 'required|string',
+            'current_password' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = $request->user();
         
-        if (!Hash::check($request->old_password, $user->password)) {
+        if (!Hash::check($request->current_password, $user->password)) {
             $errMsg = 'The current password is incorrect.';
             return self::error($errMsg, [
-                'old_password' => [$errMsg],
+                'current_password' => [$errMsg],
             ], 422);
         }
 
@@ -83,5 +88,52 @@ class AuthController extends BaseApiController
         $user->save();
 
         return self::success(message: 'Password updated successfully');
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        $token = Password::createToken($user);
+
+        event(new UserForgotPassword($user, $token));
+
+        return self::success(message: 'A password reset email has been sent to you.');
+    }
+
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'token' => 'required|string',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $record = \DB::table('password_reset_tokens')->where('email', $request->email)->first();
+        
+        if (!$record) {
+            return self::error('No password reset request was found for this email.', code: 422);
+        }
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->password = Hash::make($password);
+                $user->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            \DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+            return self::success(message: 'Password reset successfully.');
+        }
+
+        return self::error('Password reset link is invalid or expired.', code: 422);
     }
 }

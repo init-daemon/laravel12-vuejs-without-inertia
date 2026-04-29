@@ -1,13 +1,16 @@
 export const errorsFromResponse = (response) => {
-    const errors = response.data?.errors?.errors || response.data?.errors;
-
-    if (errors ) {
-        return errors;
+    if (response) {
+        const errors = response?.data?.errors?.errors || response.data?.errors;
+        
+        if (errors ) {
+            return errors;
+        }
     }
 
     return {
         message: 'Invalid',
     }
+
 }
 
 

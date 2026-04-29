@@ -26,18 +26,18 @@
 
                 <template v-else>
                     <div class="space-y-2">
-                        <Label for="old_password">Current Password</Label>
+                        <Label for="current_password">Current Password</Label>
                         <Input
-                            id="old_password"
-                            v-model="formData.old_password"
+                            id="current_password"
+                            v-model="formData.current_password"
                             type="password"
                             :disabled="isSubmitting"
                             :class="{
-                                'border-red-500': getErrorsByKey(errors, 'old_password'),
+                                'border-red-500': getErrorsByKey(errors, 'current_password'),
                             }"
                         />
-                        <p v-if="getErrorsByKey(errors, 'old_password')" class="text-sm text-red-500">
-                            {{ getErrorsByKey(errors, 'old_password') }}
+                        <p v-if="getErrorsByKey(errors, 'current_password')" class="text-sm text-red-500">
+                            {{ getErrorsByKey(errors, 'current_password') }}
                         </p>
                     </div>
 
@@ -120,7 +120,7 @@ const props = defineProps({
 const emit = defineEmits(['updated'])
 
 const formData = ref({
-    old_password: '',
+    current_password: '',
     password: '',
     password_confirmation: '',
 })

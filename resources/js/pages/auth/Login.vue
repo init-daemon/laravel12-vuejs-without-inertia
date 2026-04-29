@@ -31,8 +31,14 @@
 
                     <Button type="submit" class="w-full" :disabled="loading">
                         <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
-                        {{ loading ? 'Connexion...' : 'Se connecter' }}
+                        {{ loading ? 'Loading...' : 'Login' }}
                     </Button>
+
+                    <div class="text-center">
+                        <RouterLink :to="{ name: 'password.forgot' }">
+                            Forgot password ?
+                        </RouterLink>
+                    </div>
                 </form>
 
                 <div v-if="error" class="mt-4 text-sm text-destructive text-center">

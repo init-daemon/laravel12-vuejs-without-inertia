@@ -6,12 +6,31 @@
             :errors="userErrors"
             @updated="updateProfile"
         />
-        <PasswordEditForm
-            id="update-password"
-            :isSubmitting="isPasswordSubmitting"
-            :errors="passwordErrors"
-            @updated="updatePassword"
-        />
+
+        <Tabs default-value="new-password" id="update-password">
+            <TabsList>
+                <TabsTrigger value="new-password">
+                    New password
+                </TabsTrigger>
+                <TabsTrigger value="forgot-password">
+                    Forgot Password
+                </TabsTrigger>
+            </TabsList>
+            <TabsContent value="new-password">
+                <PasswordEditForm
+                    :isSubmitting="isPasswordSubmitting"
+                    :errors="passwordErrors"
+                    @updated="updatePassword"
+                />
+            </TabsContent>
+            <TabsContent value="forgot-password">
+                <ForgotPasswordForm
+                    :isSubmitting="requestingForgotPassword"
+                    :errors="requestForgotPasswordErrors"
+                    @forgot="forgotPassword"
+                />
+            </TabsContent>
+        </Tabs>
     </div>
 </template>
 
@@ -22,12 +41,20 @@ const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { updateUser } = useUser()
 
+const {
+    requestForgotPasswordErrors,
+    requestingForgotPassword,
+    isPasswordSubmitting,
+    passwordErrors,
+
+    forgotPassword,
+    updatePassword,
+
+} = useAuth()
+
 const userForm = ref({})
 const isSubmitting = ref(false)
 const userErrors = ref({})
-
-const isPasswordSubmitting = ref(false)
-const passwordErrors = ref({})
 
 const toast = useToast()
 
@@ -49,25 +76,6 @@ const updateProfile = async (formData) => {
         isSubmitting.value = false
     }
 }
-
-const updatePassword = async (payload) => {
-    isPasswordSubmitting.value = true
-    passwordErrors.value = {}
-
-    try {
-        const response = await authStore.updatePassword(payload)
-        console.log(response.data)
-        
-        toast.success({
-            description: response.data.message
-        })
-    } catch (errors) {
-        passwordErrors.value = errorsFromResponse(errors.response);
-    } finally {
-        isPasswordSubmitting.value = false
-    }
-}
-
 
 onMounted(async () => {
     scrollToHash(route.hash)
