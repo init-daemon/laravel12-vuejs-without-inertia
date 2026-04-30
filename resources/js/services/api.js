@@ -21,7 +21,7 @@ api.interceptors.response.use(
     response => response,
     error => {
         const appStore = useAppStore();
-        const { isNotFound } = storeToRefs(appStore);
+        const { isResourceNotFound, isInternalServerError } = storeToRefs(appStore);
         
         if (error.response?.status === 401) {
             localStorage.removeItem('auth_token');
@@ -30,7 +30,11 @@ api.interceptors.response.use(
         }
 
         if (error.response?.status === 404) {
-            isNotFound.value = true;
+            isResourceNotFound.value = true;
+        }
+
+        if (error.response?.status === 500) {
+            isInternalServerError.value = true;
         }
         
         return Promise.reject(error);

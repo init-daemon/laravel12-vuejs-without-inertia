@@ -53,9 +53,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
     const appStore = useAppStore();
-    const { isNotFound } = storeToRefs(appStore);
+    const { isResourceNotFound } = storeToRefs(appStore);
 
-    isNotFound.value = false;
+    isResourceNotFound.value = false;
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         next({ name: 'login' });
