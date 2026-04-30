@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { Loader2 } from 'lucide-vue-next'
+import { Loader2, CheckCircle2Icon} from 'lucide-vue-next'
 
 const router = useRouter();
 
