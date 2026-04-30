@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
+    const isResourceNotFound = ref(false);
+    const isInternalServerError = ref(false);
     const theme = ref(localStorage.getItem('theme') || 'system')
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -39,10 +41,19 @@ export const useAppStore = defineStore('app', () => {
         })
     }
 
+    const resetError = () => {
+        isResourceNotFound.value = false;
+        isInternalServerError.value = false;
+    }
+
     return {
         theme,
+        isResourceNotFound,
+        isInternalServerError,
+        
         setTheme,
         toggleTheme,
         initTheme,
+        resetError,
     }
 })

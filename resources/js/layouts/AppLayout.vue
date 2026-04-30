@@ -17,7 +17,9 @@
             v-else
         >
             <Header />
-            <RouterView />
+            <NotFound v-if="isResourceNotFound"/>
+            <InternalServerError v-else-if="isInternalServerError" />
+            <RouterView v-else />
         </template>
         <Toaster
             position="top-right"
@@ -32,14 +34,16 @@
 import 'vue-sonner/style.css'
 
 import { Loader2 } from 'lucide-vue-next'
-import Header from './Header.vue'
 import { Toaster } from 'vue-sonner'
+import NotFound from '@/pages/error/NotFound.vue'
+import InternalServerError from '@/pages/error/InternalServerError.vue'
+import Header from './Header.vue'
 
 const authStore = useAuthStore()
 const starting = ref(true)
 
 const appStore = useAppStore();
-const { theme } = storeToRefs(appStore);
+const { theme, isResourceNotFound, isInternalServerError } = storeToRefs(appStore);
 
 onMounted(async () => {
     await authStore.initAuth().finally(() => {

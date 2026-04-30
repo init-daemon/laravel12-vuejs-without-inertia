@@ -20,12 +20,23 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
     response => response,
     error => {
+        const appStore = useAppStore();
+        const { isResourceNotFound, isInternalServerError } = storeToRefs(appStore);
         
         if (error.response?.status === 401) {
             localStorage.removeItem('auth_token');
             
             window.location.href = '/login';
         }
+
+        if (error.response?.status === 404) {
+            isResourceNotFound.value = true;
+        }
+
+        if (error.response?.status === 500) {
+            isInternalServerError.value = true;
+        }
+        
         return Promise.reject(error);
     }
 );
