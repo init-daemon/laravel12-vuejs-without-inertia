@@ -24,3 +24,7 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
     ->name('verification.verify');
+
+Route::get('/{any?}', function () {
+    abort(404, 'Not found.');
+})->where('any', '.*');

@@ -20,12 +20,19 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
     response => response,
     error => {
+        const appStore = useAppStore();
+        const { isNotFound } = storeToRefs(appStore);
         
         if (error.response?.status === 401) {
             localStorage.removeItem('auth_token');
             
             window.location.href = '/login';
         }
+
+        if (error.response?.status === 404) {
+            isNotFound.value = true;
+        }
+        
         return Promise.reject(error);
     }
 );

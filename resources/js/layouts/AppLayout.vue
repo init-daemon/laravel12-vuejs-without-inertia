@@ -17,7 +17,8 @@
             v-else
         >
             <Header />
-            <RouterView />
+            <NotFound v-if="isNotFound"/>
+            <RouterView v-else />
         </template>
         <Toaster
             position="top-right"
@@ -34,12 +35,13 @@ import 'vue-sonner/style.css'
 import { Loader2 } from 'lucide-vue-next'
 import Header from './Header.vue'
 import { Toaster } from 'vue-sonner'
+import NotFound from '@/pages/error/NotFound.vue'
 
 const authStore = useAuthStore()
 const starting = ref(true)
 
 const appStore = useAppStore();
-const { theme } = storeToRefs(appStore);
+const { theme, isNotFound } = storeToRefs(appStore);
 
 onMounted(async () => {
     await authStore.initAuth().finally(() => {

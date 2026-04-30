@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
+    const isNotFound = ref(false);
     const theme = ref(localStorage.getItem('theme') || 'system')
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -41,6 +42,7 @@ export const useAppStore = defineStore('app', () => {
 
     return {
         theme,
+        isNotFound,
         setTheme,
         toggleTheme,
         initTheme,

@@ -6,6 +6,7 @@ import ResetPassword from '@/pages/auth/ResetPassword.vue';
 import ForgotPassword from '@/pages/auth/ForgotPassword.vue';
 import profileRoute from './profile';
 import Register from '@/pages/auth/Register.vue';
+import NotFound from '@/pages/error/NotFound.vue';
 
 const routes = [
     {
@@ -36,6 +37,11 @@ const routes = [
         name: 'password.forgot',
         component: ForgotPassword,
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: NotFound
+    },
     ...profileRoute,
 ];
 
@@ -46,6 +52,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
+    const appStore = useAppStore();
+    const { isNotFound } = storeToRefs(appStore);
+
+    isNotFound.value = false;
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         next({ name: 'login' });
