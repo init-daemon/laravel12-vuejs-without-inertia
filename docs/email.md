@@ -48,12 +48,12 @@ namespace App\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendForgotPasswordEmailListener implements ShouldQueue
+class SendPasswordRequestListener implements ShouldQueue
 {
     public $queue = 'emails';
     public $tries = 3;
 
-    public function handle(UserForgotPassword $event): void
+    public function handle(UserForgotPasswordEvent $event): void
     {
         $resetLink = '...';
 

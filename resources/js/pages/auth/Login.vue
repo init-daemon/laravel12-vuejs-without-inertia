@@ -14,7 +14,6 @@
                             type="email"
                             placeholder="exemple@email.com"
                             :disabled="loading"
-                            autocomplete="email"
                         />
                     </div>
                     <div class="space-y-2">
@@ -25,7 +24,6 @@
                             type="password"
                             placeholder="••••••••"
                             :disabled="loading"
-                            autocomplete="current-password"
                         />
                     </div>
 
@@ -34,9 +32,12 @@
                         {{ loading ? 'Loading...' : 'Login' }}
                     </Button>
 
-                    <div class="text-center">
+                    <div class="flex text-center justify-between">
                         <RouterLink :to="{ name: 'password.forgot' }">
                             Forgot password ?
+                        </RouterLink>
+                        <RouterLink :to="{ name: 'register' }">
+                            Register
                         </RouterLink>
                     </div>
                 </form>
@@ -53,6 +54,7 @@
 import { Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
+const route = useRoute();
 const authStore = useAuthStore()
 const toast = useToast()
 
@@ -83,4 +85,10 @@ const handleLogin = async () => {
         loading.value = false
     }
 }
+
+onMounted(() => {
+    if (route.query.verified) {
+        toast.success({ description: "Email verified successfully." })
+    }
+})
 </script>

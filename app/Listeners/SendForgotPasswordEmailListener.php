@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\UserForgotPassword;
+use App\Events\UserForgotPasswordEvent;
 use App\Mail\ForgotPasswordMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
@@ -16,7 +16,7 @@ class SendForgotPasswordEmailListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(UserForgotPassword $event): void
+    public function handle(UserForgotPasswordEvent $event): void
     {
         $resetLink = config('app.url'). '/reset-password/' . $event->token . '?email=' . urlencode($event->user->email);
 

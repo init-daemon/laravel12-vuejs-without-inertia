@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\VerificationController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login');
@@ -20,3 +21,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('/users', UserController::class)->names('users');
 });
+
+Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
+    ->name('verification.verify');

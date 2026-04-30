@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Contracts\AuthServiceInterface;
-use App\Events\UserForgotPassword;
+use App\Events\UserForgotPasswordEvent;
+use App\Events\UserRegisterEvent;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -22,6 +24,8 @@ class AuthController extends BaseApiController
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        UserService::checkEmailVerified($request->email);
 
         [$token, $user] = $this->authService->attempt($request->only('email', 'password'));
 
@@ -52,17 +56,20 @@ class AuthController extends BaseApiController
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'firstname' => 'required|string|min:2|max:50',
+            'lastname' => 'required|string|min:2|max:50',
+            'email' => 'required|string|min:2|max:50|unique:users,email,',
             'password' => 'required|min:8|confirmed',
         ]);
 
-        [$token, $user] = $this->authService->register($request->all());
+        $registerResult = $this->authService->register($request->all());
+        $user = $registerResult['user'];
+
+        event(new UserRegisterEvent($user));
 
         return self::success([
-            'token' => $token,
             'user' => $user,
-        ], code: 201);
+        ], 'Registration successful! Please check your email to confirm your address.', 201);
     }
 
 
@@ -93,14 +100,16 @@ class AuthController extends BaseApiController
     public function forgotPassword(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
-        $token = Password::createToken($user);
-
-        event(new UserForgotPassword($user, $token));
+        if ($user) {
+            $token = Password::createToken($user);
+    
+            event(new UserForgotPasswordEvent($user, $token));
+        }
 
         return self::success(message: 'A password reset email has been sent to you.');
     }
@@ -122,8 +131,15 @@ class AuthController extends BaseApiController
 
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
+
             function ($user, $password) {
+
                 $user->password = Hash::make($password);
+
+                if (!$user->hasVerifiedEmail()) {
+                    $user->email_verified_at = now();
+                }
+
                 $user->save();
             }
         );

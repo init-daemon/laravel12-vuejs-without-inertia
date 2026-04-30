@@ -20,7 +20,8 @@
                 <PasswordEditForm
                     :isSubmitting="isPasswordSubmitting"
                     :errors="passwordErrors"
-                    @updated="updatePassword"
+                    :key="passwordChangedKey"
+                    @updated="handleUpdatePassword"
                 />
             </TabsContent>
             <TabsContent value="forgot-password">
@@ -55,6 +56,7 @@ const {
 const userForm = ref({})
 const isSubmitting = ref(false)
 const userErrors = ref({})
+const passwordChangedKey = ref(false);
 
 const toast = useToast()
 
@@ -75,6 +77,12 @@ const updateProfile = async (formData) => {
     } finally {
         isSubmitting.value = false
     }
+}
+
+const handleUpdatePassword = async (payload) => {
+    await updatePassword(payload);
+
+    passwordChangedKey.value++;
 }
 
 onMounted(async () => {

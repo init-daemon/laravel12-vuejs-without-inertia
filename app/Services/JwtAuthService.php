@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Contracts\AuthServiceInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class JwtAuthService implements AuthServiceInterface
@@ -37,14 +36,10 @@ class JwtAuthService implements AuthServiceInterface
 
     public function register(array $data): array
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = UserService::createUser($data);
 
-        $token = JWTAuth::fromUser($user);
-
-        return [$token, $user];
+        return [
+            "user" => $user,
+        ];
     }
 }

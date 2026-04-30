@@ -18,14 +18,16 @@ export const useAuth = () => {
             toast.success({
                 description: response.data.message,
             })
+            
+            return response;
         } catch (error) {
-            if (error.response?.status === 422) {
-                requestForgotPasswordErrors.value = errorsFromResponse(error.response)
-            } else {
-                toast.error({
-                    description: 'Failed to request forgot password.',
-                });
-            }
+            requestForgotPasswordErrors.value = errorsFromResponse(error.response);
+
+            toast.error({
+                description: 'Failed to request forgot password.',
+            });
+
+            return false;
         } finally {
             requestingForgotPassword.value = false;
         }
@@ -40,10 +42,14 @@ export const useAuth = () => {
             
             toast.success({
                 description: response?.data?.message
-            })
+            });
+            
+            return response;
         } catch (errors) {
             console.log(errors);
             passwordErrors.value = errorsFromResponse(errors.response);
+
+            return false;
         } finally {
             isPasswordSubmitting.value = false
         }

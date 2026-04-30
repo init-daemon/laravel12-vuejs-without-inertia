@@ -40,11 +40,7 @@ class UserController extends BaseApiController
             ]
         );
 
-        User::create([
-            ...$validated,
-            'username' => $validated['username'] ?? UserService::generateUsername($validated['firstname'], $validated['lastname']),
-            'password' => fake()->password(8),
-        ]);
+        UserService::createUser($validated);
 
         return self::success($validated, 'Created');
     }

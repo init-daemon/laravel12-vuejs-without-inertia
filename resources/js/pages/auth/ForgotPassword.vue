@@ -3,7 +3,8 @@
         <ForgotPasswordForm
             :isSubmitting="requestingForgotPassword"
             :errors="requestForgotPasswordErrors"
-            @forgot="forgotPassword"
+            :isSuccess="isSuccess"
+            @forgot="handleForgotPassword"
             @cancel="handleCancel"
         />
     </div>
@@ -17,6 +18,14 @@ const {
 
     forgotPassword,
 } = useAuth()
+
+const isSuccess = ref(false);
+
+const handleForgotPassword = async (payload) => {
+    const response = await forgotPassword(payload);
+    
+    isSuccess.value = !!response;
+}
 
 const handleCancel = () => {
     router.push('/');

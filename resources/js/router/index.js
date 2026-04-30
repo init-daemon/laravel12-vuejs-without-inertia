@@ -5,6 +5,7 @@ import Login from '@/pages/auth/Login.vue';
 import ResetPassword from '@/pages/auth/ResetPassword.vue';
 import ForgotPassword from '@/pages/auth/ForgotPassword.vue';
 import profileRoute from './profile';
+import Register from '@/pages/auth/Register.vue';
 
 const routes = [
     {
@@ -17,6 +18,12 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login,
+        meta: { requiresGuest: true },
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: Register,
         meta: { requiresGuest: true },
     },
     {
