@@ -19,7 +19,6 @@
             <Header />
             <RouterView />
         </template>
-
         <Toaster
             position="top-right"
             closeButton="true"
@@ -34,10 +33,13 @@ import 'vue-sonner/style.css'
 
 import { Loader2 } from 'lucide-vue-next'
 import Header from './Header.vue'
+import { Toaster } from 'vue-sonner'
 
 const authStore = useAuthStore()
 const starting = ref(true)
-const { theme } = useTheme()
+
+const appStore = useAppStore();
+const { theme } = storeToRefs(appStore);
 
 onMounted(async () => {
     await authStore.initAuth().finally(() => {

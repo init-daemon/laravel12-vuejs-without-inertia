@@ -11,8 +11,8 @@
                 </h2>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
-                        <span class="text-gray-500 dark:text-gray-400">Username :</span>
-                        <span class="text-gray-800 dark:text-gray-200">{{ user.name }}</span>
+                        <span class="text-gray-500 dark:text-gray-400">Fullname :</span>
+                        <span class="text-gray-800 dark:text-gray-200">{{ user.fullname }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500 dark:text-gray-400">Email :</span>

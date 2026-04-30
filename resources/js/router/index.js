@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '@/pages/dashboard/Dashboard.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import Login from '@/pages/auth/Login.vue';
+import ResetPassword from '@/pages/auth/ResetPassword.vue';
+import ForgotPassword from '@/pages/auth/ForgotPassword.vue';
+import profileRoute from './profile';
+import Register from '@/pages/auth/Register.vue';
 
 const routes = [
     {
@@ -16,6 +20,23 @@ const routes = [
         component: Login,
         meta: { requiresGuest: true },
     },
+    {
+        path: '/register',
+        name: 'register',
+        component: Register,
+        meta: { requiresGuest: true },
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'password.reset',
+        component: ResetPassword,
+    },
+    {
+        path: '/forgot-password',
+        name: 'password.forgot',
+        component: ForgotPassword,
+    },
+    ...profileRoute,
 ];
 
 const router = createRouter({

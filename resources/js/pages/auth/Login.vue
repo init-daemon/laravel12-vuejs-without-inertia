@@ -14,7 +14,6 @@
                             type="email"
                             placeholder="exemple@email.com"
                             :disabled="loading"
-                            autocomplete="email"
                         />
                     </div>
                     <div class="space-y-2">
@@ -25,14 +24,22 @@
                             type="password"
                             placeholder="••••••••"
                             :disabled="loading"
-                            autocomplete="current-password"
                         />
                     </div>
 
-                        <Button type="submit" class="w-full" :disabled="loading">
+                    <Button type="submit" class="w-full" :disabled="loading">
                         <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
-                        {{ loading ? 'Connexion...' : 'Se connecter' }}
+                        {{ loading ? 'Loading...' : 'Login' }}
                     </Button>
+
+                    <div class="flex text-center justify-between">
+                        <RouterLink :to="{ name: 'password.forgot' }">
+                            Forgot password ?
+                        </RouterLink>
+                        <RouterLink :to="{ name: 'register' }">
+                            Register
+                        </RouterLink>
+                    </div>
                 </form>
 
                 <div v-if="error" class="mt-4 text-sm text-destructive text-center">
@@ -47,11 +54,12 @@
 import { Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
+const route = useRoute();
 const authStore = useAuthStore()
 const toast = useToast()
 
 const credentials = ref({
-    email: 'test@example.com',
+    email: 'admin@app.com',
     password: 'password',
 })
 
@@ -69,12 +77,18 @@ const handleLogin = async () => {
         })
         router.push({ name: 'dashboard' })
     } catch (err) {
-        const message =
-            err.response?.data?.message || 'Error.'
+        const message = err.response?.data?.message || 'Error.'
         error.value = message
+        
         toast.error({ description: message })
     } finally {
         loading.value = false
     }
 }
+
+onMounted(() => {
+    if (route.query.verified) {
+        toast.success({ description: "Email verified successfully." })
+    }
+})
 </script>

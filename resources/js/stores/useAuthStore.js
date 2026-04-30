@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const isAuthenticated = computed(() => !!token.value);
 
-    async function fetchUser() {
+    async function fetchAuth() {
         try {
             const response = await api.get('/user');
 
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     async function login(credentials) {
         const response = await api.post('/login', credentials);
-        const { token: newToken, user: loggedUser } = response.data;
+        const { token: newToken, user: loggedUser } = response.data?.data;
 
         token.value = newToken || null;
         if (newToken) {
@@ -35,15 +35,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     async function register(data) {
         const response = await api.post('/register', data);
-        const { token: newToken, user: newUser } = response.data;
-
-        token.value = newToken || null;
-        if (newToken) {
-            localStorage.setItem('auth_token', newToken);
-        }
-        user.value = newUser;
-
-        return newUser;
+        
+        return response;
     }
 
     async function logout() {
@@ -60,20 +53,25 @@ export const useAuthStore = defineStore('auth', () => {
     async function initAuth() {
         if (isAuthenticated.value) {
             try {
-                await fetchUser();
+                await fetchAuth();
             } catch {
             }
         }
+    }
+
+    async function updatePassword(payload) {
+        return await api.put('/user/password', payload);
     }
 
     return {
         user,
         token,
         isAuthenticated,
-        fetchUser,
+        fetchAuth,
         login,
         register,
         logout,
         initAuth,
+        updatePassword,
     };
 });

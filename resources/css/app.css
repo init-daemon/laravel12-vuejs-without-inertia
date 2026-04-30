@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  	--font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --color-primary: #3b82f6;
+  	--color-primary: #3b82f6;
 }
 
 .dark {
-  --color-primary: #60a5fa;
+  	--color-primary: #60a5fa;
 }
 
 body {
@@ -21,5 +21,13 @@ body {
 }
 
 button {
-  cursor: pointer;
+  	cursor: pointer;
+}
+
+a {
+	color: var(--color-primary);
+}
+
+a:hover {
+	text-decoration: underline;
 }

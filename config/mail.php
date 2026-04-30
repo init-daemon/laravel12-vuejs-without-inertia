@@ -95,6 +95,19 @@ return [
             ],
         ],
 
+        'brevo' => [
+            'transport' => 'smtp',
+            'host' => env('BREVO_HOST', 'smtp-relay.brevo.com'),
+            'port' => env('BREVO_PORT', 587),
+            'encryption' => env('BREVO_ENCRYPTION', 'tls'),
+            'username' => env('BREVO_USERNAME'),
+            'password' => env('BREVO_PASSWORD'),
+            'from' => [
+                'address' => env('BREVO_FROM_ADDRESS'),
+                'name' => env('BREVO_FROM_NAME'),
+            ],
+        ],
+
     ],
 
     /*

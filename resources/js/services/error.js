@@ -1,13 +1,16 @@
 export const errorsFromResponse = (response) => {
-    const errors = response.data?.errors?.errors || response.data?.errors;
-
-    if (errors ) {
-        return errors;
+    if (response) {
+        const errors = response?.data?.errors?.errors || response.data?.errors;
+        
+        if (errors ) {
+            return errors;
+        }
     }
 
     return {
         message: 'Invalid',
     }
+
 }
 
 
@@ -25,3 +28,12 @@ export const getFirstErrorMessage = (errors) => {
     
     return '';
 };
+
+
+export const getErrorsByKey = (errors, key) => {
+    try {
+        return errors[key][0];
+    } catch (e) {
+        return '';
+    }
+}
