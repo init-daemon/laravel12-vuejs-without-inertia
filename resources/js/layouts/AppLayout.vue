@@ -23,7 +23,7 @@
         </template>
         <Toaster
             position="top-right"
-            closeButton="true"
+            :closeButton="true"
             :theme="theme"
             richColors
         />

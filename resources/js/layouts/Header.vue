@@ -22,8 +22,8 @@
                         <DropdownMenuTrigger as-child>
                             <Button variant="ghost" class="relative h-8 w-8 rounded-full">
                                 <Avatar>
-                                    <AvatarImage :src="user.avatar" :alt="user.name" />
-                                    <AvatarFallback>
+                                    <AvatarImage :src="user.avatar" :alt="user.name" v-if="user.avatar"/>
+                                    <AvatarFallback v-else>
                                         {{ getInitials(user.fullname) }}
                                     </AvatarFallback>
                                 </Avatar>
