@@ -5,6 +5,7 @@ import Login from '@/pages/auth/Login.vue';
 import ResetPassword from '@/pages/auth/ResetPassword.vue';
 import ForgotPassword from '@/pages/auth/ForgotPassword.vue';
 import profileRoute from './profile';
+import adminUserRoute from './admin.user';
 import Register from '@/pages/auth/Register.vue';
 import NotFound from '@/pages/error/NotFound.vue';
 
@@ -43,6 +44,7 @@ const routes = [
         component: NotFound
     },
     ...profileRoute,
+    ...adminUserRoute,
 ];
 
 const router = createRouter({
@@ -53,14 +55,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
     const appStore = useAppStore();
-    const { isResourceNotFound } = storeToRefs(appStore);
 
-    isResourceNotFound.value = false;
+    appStore.resetError();
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         next({ name: 'login' });
     } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
         next({ name: 'dashboard' });
+    } else if (to.meta.requireAdmin && authStore.isAuthenticated && authStore.user?.type !== 'admin') {
+        next({ name: 'dashboard' })
     } else {
         next();
     }

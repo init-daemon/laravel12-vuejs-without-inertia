@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Abbasudo\Purity\Traits\Filterable;
+use Abbasudo\Purity\Traits\Sortable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,7 +14,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens, \Illuminate\Auth\MustVerifyEmail;
+    use HasFactory, Notifiable, HasApiTokens, \Illuminate\Auth\MustVerifyEmail, Filterable, Sortable;
 
     /**
      * The attributes that are mass assignable.
@@ -35,10 +37,9 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
-        'is_email_verified',
     ];
 
-    protected $appends = ["fullname"];
+    protected $appends = ["fullname", "is_email_verified"];
 
     /**
      * Get the attributes that should be cast.

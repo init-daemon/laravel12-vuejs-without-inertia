@@ -1,17 +1,21 @@
 <template>
-    <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div class="container flex h-14 items-center justify-between px-4 m-auto">
-            <router-link to="/" class="flex items-center gap-2 font-semibold">
-                <Home class="h-5 w-5" />
-                <span class="hidden sm:inline-block">MyApp</span>
-            </router-link>
+    <header class="sticky top-0 z-40 w-full border-b bg-background">
+        <div class="flex h-14 items-center justify-between px-4">
+            <div class="flex items-center gap-2">
+                <button
+                    v-if="showSidebarToggle"
+                    @click="$emit('toggle-sidebar')"
+                    class="p-2 rounded-md hover:bg-muted"
+                >
+                    <PanelLeft class="h-5 w-5" />
+                </button>
+            </div>
 
             <div class="flex items-center gap-2">
                 <Button
                     variant="ghost"
                     size="icon"
                     @click="appStore.toggleTheme"
-                    aria-label="Basculer le thème"
                 >
                     <Sun v-if="theme === 'dark'" class="h-5 w-5" />
                     <Moon v-else class="h-5 w-5" />
@@ -56,7 +60,7 @@
 
 <script setup>
 import {
-    Home,
+    PanelLeft,
     Sun,
     Moon,
     User,
@@ -71,6 +75,12 @@ const { user } = storeToRefs(authStore);
 const appStore = useAppStore();
 const { theme } = storeToRefs(appStore);
 
+defineProps({
+    collapsed: Boolean,
+    showSidebarToggle: Boolean,
+})
+
+defineEmits(['toggle-sidebar'])
 
 async function handleLogout() {
     await authStore.logout()

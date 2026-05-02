@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 
 class UserController extends BaseApiController
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = User::sort()->filter();
 
+        return self::successList($query, $request);
     }
 
     public function show(User $user)

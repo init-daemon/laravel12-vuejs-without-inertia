@@ -20,7 +20,7 @@ class UserService
             $count++;
         }
 
-        return $username;
+        return strtolower($username);
     }
 
     public static function createUser(array $data): User

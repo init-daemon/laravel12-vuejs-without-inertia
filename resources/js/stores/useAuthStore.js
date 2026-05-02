@@ -5,6 +5,7 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('auth_token') || null);
 
     const isAuthenticated = computed(() => !!token.value);
+    const isAdmin = computed(() => user.value?.type === 'admin');
 
     async function fetchAuth() {
         try {
@@ -67,6 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         token,
         isAuthenticated,
+        isAdmin,
         fetchAuth,
         login,
         register,
